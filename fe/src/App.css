@@ -1,0 +1,115 @@
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1d19317e;
+}
+
+::-webkit-slider-thumb:hover {
+    background: #1d1931;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.container {
+    background-color: aqua;
+    width: 1600px;
+}
+
+.modal {
+    display: block;
+    background-color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 700px;
+    justify-content: center;
+    box-shadow: 0px 4px 4px 4px rgba(0, 0, 0, 0.6);
+    margin-top: 25%;    
+    align-items: center;
+    color: white;
+}
+
+.modal-header {
+    color: black;
+    font-weight: bolder;
+    width: 100%;
+    color: white;
+    height: 80px;
+    padding: 10px 0px;
+    text-align: center;
+   
+
+}
+
+.modal-header span {
+    color: black;
+     font-size: 30px;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: black;
+}
+
+.modal-content input {
+    align-items: center;
+    padding:15px;
+    color: black;
+    width: 90%;
+    margin: 10px;
+    box-shadow: 0px 4px 4px 4px rgba(0, 0, 0, 0.4);
+}
+
+.modal-content input[type=button] {
+    background-color: red;
+    color: white;
+}
+
+.modal-content input[type=button]:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.modal-footer {
+    color: black;
+    font-weight: bolder;
+    color: white;
+    height: 50px;
+    text-align: center;
+}
+
+.modal-footer button {
+    padding: 10px;
+    justify-content: flex-end;
+    padding: 10px;
+    color:white;
+    background-color: #5c97bd;
+}
+
+.modal-footer button:hover {
+    opacity: 0.9;
+}
+
+.slackheader {
+    width: 100%;
+    height: 50px;
+    background-color: rgb(80,30, 80);
+    box-shadow: 0px 1px 1px 1px rgba(0,0,0,0.3);
+}
+
+.SideNav {
+    width: 52px;
+    height: 100%;
+    background-color: rgb(80,30, 80);
+    box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.3);
+}
