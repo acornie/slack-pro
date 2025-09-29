@@ -11,6 +11,7 @@ exports.REQUEST = {
     EMOTICON: 'EMOTICON',
     TYPING: 'TYPING',
     USER:'USER', 
+    // CHANGEUSER:'CHANGEUSER'
 }
 
 exports.METHOD = {

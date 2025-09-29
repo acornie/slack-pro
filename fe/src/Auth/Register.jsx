@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "../utils/toast";
 import { Button, HStack, Input, Stack, Text, VStack, Image, Avatar, Center } from "@chakra-ui/react";
 const SignUp = () => {
+    const [file, setFile]= useState();
     const navigate = useNavigate();
     const [userData, setuserData] = useState({});
     const InputChange = (e) => {
@@ -14,7 +15,7 @@ const SignUp = () => {
     }
      
      const [avatar, setAvatar] = useState({
-        path: "http://localhost:3000/rabbit(9).gif", file: null
+        path: " ", file: null
     });
 
         const getfile = () => {
@@ -23,12 +24,13 @@ const SignUp = () => {
     const fileref = useRef(null);
 
     const setavatar = (e) => {
-        const file = e.target.files[0];
+        const file1 = e.target.files[0];
+        setFile(e.target.files[0]);
         const fileload = new FileReader();
         fileload.onload = (e) => {
-            setAvatar({ path: e.target.result, file });
+            setAvatar({ path: e.target.result, file1 });
         }
-        fileload.readAsDataURL(file);
+        fileload.readAsDataURL(file1);
     }
 
     const Register = async () => {
@@ -37,8 +39,14 @@ const SignUp = () => {
             toast.warning('Input empty');
          } 
          
+         const formData = new FormData();
+         formData.append("username", userData.username)
+         formData.append("email", userData.email)
+         formData.append("password", userData.password)
+         formData.append("avatar", file)
+
         
-          const result = await axios.post("http://localhost:8080/auth/signup", userData)
+          const result = await axios.post("http://localhost:8080/auth/signup", formData)
             if(result.data.status == 'success') {
                 toast.success(result.data.status);
                 navigate("/");

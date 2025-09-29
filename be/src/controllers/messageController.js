@@ -1,11 +1,11 @@
 const messageService = require('../services/messageService');
 const channelService = require('../services/channelService');
+const User = require("../models/user")
 const { sendToUsers } = require('../utils/chat');
 const { STATUS, REQUEST, METHOD } = require('../constants/chat');
 let userlist = [];
 let contacts = [];
 const jwt = require("jsonwebtoken");
-const User = require("../models/user");
 exports.Joinlist = async (socket) => {
     try {
         let token = socket.handshake.headers.token;
@@ -23,6 +23,7 @@ exports.Joinlist = async (socket) => {
     }
 }
 exports.create = async (socket, data) => {
+    console.log("---0--------------->", data)
     try {
         const message = await messageService.create({ sender: socket.user.id, ...data });
         const channel = await channelService.readOne(message.channel);
@@ -86,5 +87,20 @@ exports.typing = async (socket, data) => {
         socket.emit(REQUEST.TYPING, STATUS.SUCCESS, data);
     } catch (err) {
         socket.emit(REQUEST.TYPING, STATUS.FAILED, { ...data, message: err.message });
+    }
+}
+exports.changeUser = async (socket, data) => {
+    try {
+        await User.updateOne({_id: data.userId}, {status: data.status});
+        const users = await User.find({});
+        const channels = await channelService.read(socket.user.id);
+        let temp =[];
+        users.map((item) => {
+            temp = [...temp, item._id]
+        })
+        sendToUsers(socket.socketList, temp, `${REQUEST.CHANNEL}_${METHOD.READ}`, STATUS.ON, channels);
+    } catch (error) {
+        console.log(error)
+        
     }
 }

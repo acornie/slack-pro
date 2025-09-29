@@ -39,6 +39,10 @@ const onConnect = (socket) => {
     socket.on(`${REQUEST.MESSAGE}_${METHOD.READ}`, (data) => authMdr(socket, data, messageCtr.read));
     socket.on(`${REQUEST.MESSAGE}_${METHOD.UPDATE}`, (data) => authMdr(socket, data, messageCtr.update));
     socket.on(`${REQUEST.MESSAGE}_${METHOD.DELETE}`, (data) => authMdr(socket, data, messageCtr.delete));
+    socket.on(`${REQUEST.MESSAGE}_${METHOD.DELETE}`, (data) => authMdr(socket, data, messageCtr.delete));
+    socket.on("changeUser", (data) => authMdr(socket, data, messageCtr.changeUser));
+
+
     socket.on(REQUEST.EMOTICON, (data) => authMdr(socket, data, messageCtr.emoticon));
     socket.on(REQUEST.TYPING, (data) => authMdr(socket, data, messageCtr.typing));
 }

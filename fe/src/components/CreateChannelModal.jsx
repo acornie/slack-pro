@@ -26,6 +26,7 @@ const CreateChannelModal = (props) => {
   }
 
   const handleCreateChannel = () => {
+    
     if (!channelName.trim()) {
       toast.error('Please input channel name');
       return;
@@ -86,6 +87,7 @@ const CreateChannelModal = (props) => {
                   cursor='pointer'
                   _hover={{ bg: '#0001' }}
                   onClick={() => onSelectUser(user._id)}
+                  boxShadow={'2px 2px 2px 2px rgba(0,0,0,0,6)'}
                 >
                   <Checkbox isChecked={selectedUsers[user._id]} />
                   {user.username}

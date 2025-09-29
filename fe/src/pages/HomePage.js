@@ -150,7 +150,10 @@ const HomePage = () => {
               
             </HStack>
                 {channels.map(channel=>channel.types=='invite' && channel.members[0]._id == auth._id ? directname.push(channel.members[1]._id):directname.push(channel.members[0]._id))}
-            {channels.map((channel, i) => (
+            {channels.map((channel, i) => {
+              const rrr=channel.members[0]._id == auth._id ? channel.members[1] :channel.members[0];
+              // console.log(`http://localhost:8080/avatar/${rrr.avatar}`)
+              return(
               channel.types == "invite"&&
               <Flex
                 display={diadprop}
@@ -165,14 +168,14 @@ const HomePage = () => {
                 onClick={() => navigate(`/HomePage?channel=${channel._id}`)}
               >
                 <HStack position={"relative"}>
-                  <Avatar w={"35px"} h={"35px"} textAlign={"center"} rounded={"50%"} src="http://localhost:3000/rabbit(2).gif"></Avatar>
-                  <HStack position={"absolute"} w={"13px"} h={"13px"} bg={actives == "1" ? "green" : "red"} rounded={"50%"} border={"solid 2px rgba(80,30,80, 0.95);"} zIndex={99} left={"12px"} bottom={"0px"} ></HStack>
+                  <Avatar w={"35px"} h={"35px"} textAlign={"center"} rounded={"50%"} src={`http://localhost:8080/avatar/${rrr.avatar}`}></Avatar>
+                  <HStack position={"absolute"} w={"13px"} h={"13px"} bg={rrr.status} rounded={"50%"} border={"solid 2px rgba(80,30,80, 0.95);"} zIndex={99} left={"12px"} bottom={"0px"} ></HStack>
                   <Text color={"white"} fontSize={"16px"}>
-                  {channel.members[0]._id == auth._id ? channel.members[1].email :channel.members[0].email}
+                  {rrr.email}
                 </Text>
                 </HStack>
               </Flex>
-            ))}
+            )})}
             <HStack color={"white"} _hover={{ bg: '#fff2' }} justify={"center"}>
               <FaPlusSquare></FaPlusSquare>
               <Button size="ms" onClick={() => setShowDirectChannelModal(true)} className="createchannel" background={"none"} _hover={{ bg: 'none' }}>
@@ -218,7 +221,7 @@ const HomePage = () => {
               <VStack>
                 <Spinner />
                 <Text fontSize="sm">
-                  Loading...
+                  {/* Loading... */}
                 </Text>
               </VStack>
             </Flex>

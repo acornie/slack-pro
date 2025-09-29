@@ -9,19 +9,23 @@ const SocketProvider = ({ children }) => {
   const token = localStorage.getItem("token");
   const socket = useMemo(() => io(`${process.env.REACT_APP_BASE_URL}`, { extraHeaders: { token } }), []);
   const [isConnected, setIsConnected] = useState(false);
-   const [changeicon, setchangeicon] = useState("message");
-   const [actives, setactives] =useState("");
-  const {auth, setAuth} = useContext(AuthContext);
+  const [changeicon, setchangeicon] = useState("message");
+  const [actives, setactives] = useState("");
+  const { auth, setAuth } = useContext(AuthContext);
   useMemo(() => {
     socket.on("auth", (data) => {
       setAuth(data.user);
     });
     return () => {
       socket.removeListener("auth", (data) => {
-      setAuth(data.user);
+        setAuth(data.user);
       })
     }
   }, []);
+  const changeUser = (data) => {
+    console.log("--->", data)
+    socket.emit("changeUser", data)
+  }
   socket.on('connect', () => {
     setIsConnected(true);
   });
@@ -47,7 +51,8 @@ const SocketProvider = ({ children }) => {
         changeicon,
         setchangeicon,
         actives,
-        setactives
+        setactives,
+        changeUser,
       }}
     >
       {children}

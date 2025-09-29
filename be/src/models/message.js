@@ -21,7 +21,7 @@ const messageSchema = mongoose.Schema(
             required: true,
         },
         files: {
-            type: [String],
+            type: [],
         },
         emoticons: [
             {

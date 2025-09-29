@@ -11,28 +11,31 @@ import { METHOD, REQUEST } from "../constants/chat";
 const SideNav = () => {
     const navigate = useNavigate();
 
-    const { auth } = useContext(AuthContext);
-    const { socket, actives, setactives } = useContext(SocketContext);
+    const { auth, setAuth } = useContext(AuthContext);
+    const { socket, actives, setactives, changeUser } = useContext(SocketContext);
 
     const [active, setactive] = useState("home");
     const [logout, setlogout] = useState(false);
 
     useEffect(() => {
         if (auth?._id) {
-            console.log(actives)
-            if (socket) socket.emit(REQUEST.AUTH + "_" + METHOD.UPDATE, { ...auth, status: actives });
+            if (socket) socket.emit(REQUEST.AUTH + "_" + METHOD.UPDATE, { ...auth, status: "#ff0000" });
         }
     }, [actives])
 
     const out = () => {
+        
         localStorage.removeItem("token");
         navigate('/');
+        
     }
-
+console.log(auth)
     const handleLogOut = () => {
         setactives(0);
         out();
     }
+
+    // console.log(auth.avatar, "oooooooooooooooooooooo")
 
     return (
         <>
@@ -44,14 +47,14 @@ const SideNav = () => {
                 </VStack>
                 <VStack
                     _hover={{ bg: '#fff2' }} onMouseOver={() => setlogout(true)} onMouseLeave={() => setlogout(false)} position={"relative"}>
-                    <Avatar w={"35px"} h={"35px"} textAlign={"center"} rounded={"50%"} src="http://localhost:3000/rabbit(2).gif"/>
-                    <HStack position={"absolute"} w={"13px"} h={"13px"} bg={actives == 1 ? "green" : setactives == 0 ? "blue" : "red"} rounded={"50%"} border={"solid 2px rgba(80,30,80, 0.95);"} zIndex={99} left={"30px"} bottom={"0px"} ></HStack>
+                    <Avatar w={"35px"} h={"35px"} textAlign={"center"} rounded={"50%"} src={`http://localhost:8080/avatar/${auth.avatar}`}/>
 
-                    <HStack position={"absolute"} w={"13px"} h={"13px"} bg={actives == "sleep" ? "blue" : ""} rounded={"50%"} border={"solid 2px rgba(80,30,80, 0.95);"} zIndex={99} left={"30px"} bottom={"0px"} ></HStack>
-                    <HStack position={"absolute"} w={"13px"} h={"13px"} rounded={"50%"} border={"solid 2px rgba(80,30,80, 0.95);"} zIndex={99} left={"30px"} bottom={"0px"}></HStack>
+                    <HStack position={"absolute"} w={"13px"} h={"13px"} bg={auth.status} rounded={"50%"} border={"solid 2px rgba(80,30,80, 0.95);"} zIndex={99} left={"30px"} bottom={"0px"} ></HStack>
+                    {/* <HStack position={"absolute"} w={"13px"} h={"13px"} rounded={"50%"} border={"solid 2px rgba(80,30,80, 0.95);"} zIndex={99} left={"30px"} bottom={"0px"}></HStack> */}
                     <VStack display={logout ? "flex" : "none"} w={"80px"} bg={"rgba(80,30,80, 0.95);"} position={"absolute"} left={"50px"} bottom={0} alignItems={"center"} textAlign={"center"} color={"white"} boxShadow={"2px 2px 2px 2px rgba(0,0,0,0,3)"} zIndex={5}>
-                        <Box _hover={{ bg: 'green' }} w={"80px"} onClick={() => setactives(1)}>Action</Box>
-                        <Box _hover={{ bg: 'blue' }} w={"80px"} onClick={() => setactives(0)}>Sleep</Box>
+                        <Box _hover={{ bg: "#090" }} w={"80px"} onClick={() => {changeUser({userId: auth._id, status: "#090"}); setAuth({...auth, status: "#090"})}}>Action</Box>
+                        <Box _hover={{ bg: "#ffdd55" }} w={"80px"} onClick={() => {changeUser({userId: auth._id, status: "#ffdd55"}); setAuth({...auth, status: "#ffdd55"})}}>Sleep</Box>
+                        <Box _hover={{ bg: "#ff0000" }} w={"80px"} onClick={() => {changeUser({userId: auth._id, status: "#ff0000"}); setAuth({...auth, status: "#ff0000"})}}>Offline</Box>
                         <Box _hover={{ bg: 'black' }} w={"80px"} onClick={() => handleLogOut()}>Log out</Box>
                     </VStack>
                 </VStack>

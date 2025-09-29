@@ -121,6 +121,7 @@ const Messages = ({ channelId, messageId, isPined, ...props }) => {
             messageId={messageId}
             message={message}
             isPined={message.isPined}
+            files={message.files}
           />
         ): 
         message.isPined && (

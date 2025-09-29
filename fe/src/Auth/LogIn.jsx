@@ -70,7 +70,7 @@ const SignIn = () => {
                     </div>
                     <div className="modal-content">
                         <HStack w={"100px"} onClick={getfile} pt={"15px"} >
-                            <Avatar src={avatar.path} w={"full"} h={"full"}> </Avatar>
+                            {/* <Avatar src={avatar.path} w={"full"} h={"full"}> </Avatar> */}
                         </HStack>
                         <input type="text" name="email" onChange={InputChange} id="" placeholder="email" />
                         <input type="password" name="password" onChange={InputChange} id="" placeholder="password" />

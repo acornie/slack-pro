@@ -30,7 +30,7 @@ const AuthProvider = (props) => {
         const response=await axios.get("http://localhost:8080/auth/verify");
         if(response.data.type=='success'){
             toast.success(response.data.message);
-            setAuth({_id:response.data.data._id, email:response.data.data.email, token:storetoken});
+            setAuth({_id:response.data.data._id, email:response.data.data.email, token:storetoken, status: response.data.data.status});
             navigate('/HomePage');
         }else{
             toast.error(response.data.message);

@@ -15,9 +15,13 @@ const userSchema = mongoose.Schema(
             required: true,
         },
         status: {
-            type: Number,
-            default: -1, // -1: offline 0: busy 1: online
-        }
+            type: String,
+            default: "#090", // -1: offline 0: busy 1: online
+        },
+        avatar: {
+            type: String,
+            default: "default.gif"
+        },
     },
     {
         timestamps: true,

@@ -1,7 +1,7 @@
-import { Avatar, Badge, Box, Flex, Grid, HStack, Popover, PopoverContent, PopoverTrigger, Text, VStack } from "@chakra-ui/react";
+import { Avatar, Badge, Box, Flex, flexbox, Grid, HStack, Popover, PopoverContent, PopoverTrigger, Text, VStack } from "@chakra-ui/react";
 import { useContext, useMemo, useState, useEffect } from "react";
-import { FaEdit, FaRegCommentDots, FaRegSmile, FaRegTrashAlt, FaPinterestP } from "react-icons/fa";
-import {AiFillPushpin } from "react-icons/ai";
+import { FaEdit, FaRegCommentDots, FaRegSmile, FaRegTrashAlt, FaPinterestP, FaDownload } from "react-icons/fa";
+import { AiFillPushpin } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import useUser from "../api/useUsers";
 import { METHOD, REQUEST } from "../constants/chat";
@@ -12,7 +12,7 @@ import Emoticon from "./Emoticon";
 import Emoticons from "./Emoticons";
 import SendMessage from "./SendMessage";
 
-const Message = ({ showDate, channelId, messageId, message, isPined }) => {
+const Message = ({ showDate, channelId, messageId, message, isPined, files }) => {
   const rendermark = message.message.split(" ");
   const navigate = useNavigate();
   const { socket } = useContext(SocketContext);
@@ -41,16 +41,17 @@ const Message = ({ showDate, channelId, messageId, message, isPined }) => {
   }, [message]);
 
   const handleDelete = () => {
-    socket.emit(`${REQUEST.MESSAGE}_${METHOD.DELETE}`, 
+    socket.emit(`${REQUEST.MESSAGE}_${METHOD.DELETE}`,
       { id: message._id });
   }
 
   const handlepinsend = (boolean) => {
     setIsPin(boolean)
-    socket.emit(`${REQUEST.MESSAGE}_${METHOD.UPDATE}`, 
-      {id: message._id,
-        message:message,
-        isPined : boolean,
+    socket.emit(`${REQUEST.MESSAGE}_${METHOD.UPDATE}`,
+      {
+        id: message._id,
+        message: message,
+        isPined: boolean,
       })
   }
   const handleEmoticon = (id) => {
@@ -71,10 +72,12 @@ const Message = ({ showDate, channelId, messageId, message, isPined }) => {
       )}
       <Popover placement="top">
         <PopoverTrigger>
-          <Flex justify={sender?.username == auth.username ? "left" : "right"} >
-            <Flex key={message._id} p={2} gap={4} w={"560px"} rounded={"10px"}  bg={sender?.email == auth.email ? "rgba(205, 218, 208, 0.5)": "rgba(170, 214, 219, 0.5)"} >
-             
-              <Avatar size="sm" src={sender?.email == auth.email ? "http://localhost:3000/rabbit(8).gif" : "http://localhost:3000/rabbit(9).gif"} />
+          <Flex justify={"left"} >
+
+            {/* //sender?.username == auth.username ? "left" : "right" */}
+            <Flex key={message._id} p={2} gap={4} w={'100%'} rounded={"10px"} bg={sender?.email == auth.email ? "rgba(205, 218, 208, 0.5)" : "rgba(170, 214, 219, 0.5)"} >
+              {users.map(user => user._id == auth._id &&
+                <Avatar size="sm" src={sender?.email == user.email ? `http://localhost:8080/avatar/${auth.avatar}` : `http://localhost:8080/avatar/${sender?.avatar}`} />)}
               <VStack flexGrow={1} align='stretch' >
                 <Flex direction='column'>
                   <Flex gap={4}>
@@ -84,24 +87,57 @@ const Message = ({ showDate, channelId, messageId, message, isPined }) => {
                     <Text fontSize="sm">
                       {formatTime(message.createdAt)}
                     </Text>
+                    <HStack>
+                      {
+
+                      }
+                    </HStack>
                   </Flex>
                   {isEditing ? (
                     <SendMessage
                       isEditing
                       value={message.message}
                       messageId={message._id}
+                      files={message.files}
                       onClose={() => setIsEditing(false)}
                     />
 
                   ) : (
-                    <HStack>{
-                      rendermark.map((index) => {
-                          if( index[0] == '@') {
-                               return <Text fontSize="sm" color={'red'} > {index}  </Text>
-                            } else {
-                              return <Text fontSize="sm"> {index} </Text> }
-                        })}
-                      </HStack>
+                    <Flex justifyContent={'left'}>
+                      <VStack>
+                        <HStack>
+                          {
+                            files.map((val, kkey) => {
+                              return (
+                                <a href={"http://localhost:8080/file/" + val.filename}>
+                                  <Box bg={"#97948aff"} rounded={5} key={kkey} display={'flex'}
+                                    _hover={'#841ed8ff'} alignItems={'center'} pr={"10px"} textDecoration={'underline'} pl={'10px'}>
+                                    {val.originalname}
+                                    <Box pl={'20px'}>
+                                      <FaDownload></FaDownload>
+                                    </Box>
+                                  </Box>
+
+                                </a>
+                              )
+                            })
+                          }
+                        </HStack>
+                        <HStack>
+                          {
+                            rendermark.map((index, key) => {
+                              if (index[0] == '@') {
+                                return <Text fontSize="sm" key={key} color={'red'} > {index}  </Text>
+                              } else {
+                                return <Text fontSize="sm"> {index} </Text>
+                              }
+                            }
+                            )
+                          }
+                        </HStack>
+                      </VStack>
+
+                    </Flex>
                   )}
 
 
@@ -121,8 +157,8 @@ const Message = ({ showDate, channelId, messageId, message, isPined }) => {
                     </Link>
                   )}
                   <HStack>
-                    {emoticons.map((emoticon) => (
-                      <Box cursor='pointer'
+                    {emoticons.map((emoticon, key) => (
+                      <Box key={key} cursor='pointer'
                         onClick={() => handleEmoticon(emoticon.code)}
                       >
                         <Flex align='center' gap={0.5}>
@@ -162,16 +198,16 @@ const Message = ({ showDate, channelId, messageId, message, isPined }) => {
             <Box cursor='pointer' onClick={() => setIsEditing(true)} >
               <FaEdit />
             </Box>
-            <Box cursor='pointer' onClick={()=> isPin? handlepinsend(false): handlepinsend(true)} >
-              {isPin ? <AiFillPushpin color="red"/> : <AiFillPushpin />}
-              
+            <Box cursor='pointer' onClick={() => isPin ? handlepinsend(false) : handlepinsend(true)} >
+              {isPin ? <AiFillPushpin color="red" /> : <AiFillPushpin />}
+
             </Box>
             <Box cursor='pointer' onClick={handleDelete} >
               <FaRegTrashAlt color="red" />
             </Box>
           </HStack>
         </PopoverContent>
-      </Popover > 
+      </Popover >
     </>
   )
 }

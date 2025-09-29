@@ -18,11 +18,11 @@ const ChannelHeader = ({ channel, ...props }) => {
       <Flex p={4} justify='space-between' {...props}>
         <HStack>
           {channel.types == 'invite'?
-          <Text>
-            # {channel.members[0].email}
+          <Text fontWeight={'bold'}>
+            User name : {channel.members[0].username}
           </Text>:
-          <Text>
-            # {channel.name}
+          <Text fontWeight={'bold'}>
+            Channel name : {channel.name}
           </Text>
           }
           <Box cursor='pointer' onClick={() => setShowChannelEditModal(true)}>
